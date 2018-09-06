@@ -327,6 +327,7 @@ double AdaptiveCI::compute_energy() {
     }
     dim = PQ_space.size();
     final_wfn_.copy(PQ_space);
+    final_evecs_ = PQ_evecs->clone();
     PQ_space.clear();
 
     int froot = root_;
@@ -580,7 +581,7 @@ void AdaptiveCI::diagonalize_final_and_compute_rdms() {
     sparse_solver.diagonalize_hamiltonian_map(final_wfn_, op_, final_evals, final_evecs, nroot_,
                                               multiplicity_, diag_method_);
 
-    print_final(final_wfn_, final_evecs, final_evals);
+    print_final(final_wfn_, final_evecs_, final_evals);
 
     if (options_->get_bool("ACI_DIRECT_RDMS") == false) {
         op_.clear_op_s_lists();
@@ -594,6 +595,8 @@ void AdaptiveCI::diagonalize_final_and_compute_rdms() {
 }
 
 DeterminantHashVec AdaptiveCI::get_wavefunction() { return final_wfn_; }
+
+SharedMatrix AdaptiveCI::get_evecs() { return final_evecs_; }
 
 void AdaptiveCI::print_final(DeterminantHashVec& dets, psi::SharedMatrix& PQ_evecs,
                              psi::SharedVector& PQ_evals) {
