@@ -125,6 +125,7 @@ class AdaptiveCI : public ActiveSpaceMethod {
     void unpaired_density(ambit::Tensor Ua, ambit::Tensor Ub);
     void spin_analysis();
 
+    std::shared_ptr<FCIIntegrals> get_aci_ints();
   private:
     // ==> Class data <==
 
