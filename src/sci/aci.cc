@@ -1711,7 +1711,7 @@ void AdaptiveCI::compute_aci(DeterminantHashVec& PQ_space, psi::SharedMatrix& PQ
         detb.set_beta_bit(hole_, false);
 
         for (int n = 0, max_n = avir.size(); n < max_n; ++n) {
-            if ((mo_symmetry_[hole_] ^ mo_symmetry_[avir[n]]) == 0) {
+            if ((mo_symmetry_[hole_] ^ mo_symmetry_[avir[particle]]) == 0) {
                 det.set_alfa_bit(avir[particle], true);
                 detb.set_beta_bit(avir[particle], true);
                 break;
