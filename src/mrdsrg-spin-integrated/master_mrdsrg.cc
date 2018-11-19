@@ -811,6 +811,8 @@ void MASTER_DSRG::rotate_ints_semi_to_origin(const std::string& name, BlockedTen
 void MASTER_DSRG::H1_T1_C0(BlockedTensor& H1, BlockedTensor& T1, const double& alpha, double& C0) {
     Timer timer;
 
+    forte::timer t("H1_T1_C0");
+
     double E = 0.0;
     TIME_LINE(E += H1["em"] * T1["me"]);
     TIME_LINE(E += H1["ex"] * T1["ye"] * Gamma1_["xy"]);
@@ -831,25 +833,28 @@ void MASTER_DSRG::H1_T1_C0(BlockedTensor& H1, BlockedTensor& T1, const double& a
 
 void MASTER_DSRG::H1_T2_C0(BlockedTensor& H1, BlockedTensor& T2, const double& alpha, double& C0) {
     Timer timer;
+
+    forte::timer t("H1_T2_C0");
+
     BlockedTensor temp;
     double E = 0.0;
 
     TIME_LINE(temp = ambit::BlockedTensor::build(tensor_type_, "temp", {"aaaa"}));
-    TIME_LINE(temp["uvxy"] += H1["ex"] * T2["uvey"]);
-    TIME_LINE(temp["uvxy"] -= H1["vm"] * T2["umxy"]);
-    TIME_LINE(E += 0.5 * temp["uvxy"] * Lambda2_["xyuv"]);
+    TIME_LINE(temp["uvxy"] -= H1["ex"] * T2["uvye"]);
+    TIME_LINE(temp["uvxy"] += H1["vm"] * T2["muxy"]);
+    TIME_LINE(E += 0.5 * temp["uvxy"] * Lambda2_["uvxy"]);
 
     TIME_LINE(temp = ambit::BlockedTensor::build(tensor_type_, "temp", {"AAAA"}));
-    TIME_LINE(temp["UVXY"] += H1["EX"] * T2["UVEY"]);
-    TIME_LINE(temp["UVXY"] -= H1["VM"] * T2["UMXY"]);
-    TIME_LINE(E += 0.5 * temp["UVXY"] * Lambda2_["XYUV"]);
+    TIME_LINE(temp["UVXY"] -= H1["EX"] * T2["UVYE"]);
+    TIME_LINE(temp["UVXY"] += H1["VM"] * T2["MUXY"]);
+    TIME_LINE(E += 0.5 * temp["UVXY"] * Lambda2_["UVXY"]);
 
     TIME_LINE(temp = ambit::BlockedTensor::build(tensor_type_, "temp", {"aAaA"}));
     TIME_LINE(temp["uVxY"] += H1["ex"] * T2["uVeY"]);
     TIME_LINE(temp["uVxY"] += H1["EY"] * T2["uVxE"]);
     TIME_LINE(temp["uVxY"] -= H1["VM"] * T2["uMxY"]);
     TIME_LINE(temp["uVxY"] -= H1["um"] * T2["mVxY"]);
-    TIME_LINE(E += temp["uVxY"] * Lambda2_["xYuV"]);
+    TIME_LINE(E += temp["uVxY"] * Lambda2_["uVxY"]);
 
     E *= alpha;
     C0 += E;
@@ -862,6 +867,9 @@ void MASTER_DSRG::H1_T2_C0(BlockedTensor& H1, BlockedTensor& T2, const double& a
 
 void MASTER_DSRG::H2_T1_C0(BlockedTensor& H2, BlockedTensor& T1, const double& alpha, double& C0) {
     Timer timer;
+
+    forte::timer t("H2_T1_C0");
+
     BlockedTensor temp;
     double E = 0.0;
 
@@ -893,6 +901,8 @@ void MASTER_DSRG::H2_T1_C0(BlockedTensor& H2, BlockedTensor& T1, const double& a
 
 void MASTER_DSRG::H2_T2_C0(BlockedTensor& H2, BlockedTensor& T2, const double& alpha, double& C0) {
     Timer timer;
+
+    forte::timer t("H2_T2_C0");
 
     // <[Hbar2, T2]> (C_2)^4
     TIME_LINE(double E = H2["eFmN"] * T2["mNeF"]);
@@ -1062,6 +1072,8 @@ void MASTER_DSRG::H1_T1_C1(BlockedTensor& H1, BlockedTensor& T1, const double& a
                            BlockedTensor& C1) {
     Timer timer;
 
+    forte::timer t("H1_T1_C1");
+
     TIME_LINE(C1["ip"] += alpha * H1["ap"] * T1["ia"]);
     TIME_LINE(C1["qa"] -= alpha * T1["ia"] * H1["qi"]);
     TIME_LINE(C1["IP"] += alpha * H1["AP"] * T1["IA"]);
@@ -1122,6 +1134,8 @@ void MASTER_DSRG::H1_T2_C1(BlockedTensor& H1, BlockedTensor& T2, const double& a
                            BlockedTensor& C1) {
     Timer timer;
 
+    forte::timer t("H1_T2_C1");
+
     TIME_LINE(C1["ia"] += alpha * H1["bm"] * T2["imab"]);
     TIME_LINE(C1["ia"] += alpha * H1["bu"] * Gamma1_["uv"] * T2["ivab"]);
     TIME_LINE(C1["ia"] -= alpha * H1["vj"] * Gamma1_["uv"] * T2["ijau"]);
@@ -1179,6 +1193,8 @@ void MASTER_DSRG::H1_T2_C1(BlockedTensor& H1, BlockedTensor& T2, const double& a
 void MASTER_DSRG::H2_T1_C1(BlockedTensor& H2, BlockedTensor& T1, const double& alpha,
                            BlockedTensor& C1) {
     Timer timer;
+
+    forte::timer t("H2_T1_C1");
 
     TIME_LINE(C1["qp"] += alpha * T1["ma"] * H2["qapm"]);
     TIME_LINE(C1["qp"] += alpha * T1["xe"] * Gamma1_["yx"] * H2["qepy"]);
@@ -1275,6 +1291,9 @@ void MASTER_DSRG::H2_T1_C1(BlockedTensor& H2, BlockedTensor& T1, const double& a
 void MASTER_DSRG::H2_T2_C1(BlockedTensor& H2, BlockedTensor& T2, const double& alpha,
                            BlockedTensor& C1) {
     Timer timer;
+
+    forte::timer t("H2_T2_C1");
+
     BlockedTensor temp;
 
     /// max intermediate: a * a * p * p
@@ -1439,6 +1458,8 @@ void MASTER_DSRG::H1_T2_C2(BlockedTensor& H1, BlockedTensor& T2, const double& a
                            BlockedTensor& C2) {
     Timer timer;
 
+    forte::timer t("H1_T2_C2");
+
     TIME_LINE(C2["ijpb"] += alpha * T2["ijab"] * H1["ap"]);
     TIME_LINE(C2["ijap"] += alpha * T2["ijab"] * H1["bp"]);
     TIME_LINE(C2["qjab"] -= alpha * T2["ijab"] * H1["qi"]);
@@ -1464,6 +1485,8 @@ void MASTER_DSRG::H2_T1_C2(BlockedTensor& H2, BlockedTensor& T1, const double& a
                            BlockedTensor& C2) {
     Timer timer;
 
+    forte::timer t("H2_T1_C2");
+
     TIME_LINE(C2["irpq"] += alpha * T1["ia"] * H2["arpq"]);
     TIME_LINE(C2["ripq"] += alpha * T1["ia"] * H2["rapq"]);
     TIME_LINE(C2["rsaq"] -= alpha * T1["ia"] * H2["rsiq"]);
@@ -1488,6 +1511,8 @@ void MASTER_DSRG::H2_T1_C2(BlockedTensor& H2, BlockedTensor& T1, const double& a
 void MASTER_DSRG::H2_T2_C2(BlockedTensor& H2, BlockedTensor& T2, const double& alpha,
                            BlockedTensor& C2) {
     Timer timer;
+
+    forte::timer t("H2_T2_C2");
 
     /// max intermediate: g * g * p * p
 
