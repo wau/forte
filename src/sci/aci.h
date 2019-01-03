@@ -105,7 +105,7 @@ class AdaptiveCI : public ActiveSpaceMethod {
     DeterminantHashVec get_wavefunction();
 
     /// Get the wavefunction coefficients
-    SharedMatrix get_evecs();
+    psi::SharedMatrix get_evecs();
 
     /// Compute the ACI-NOs
     void compute_nos();
@@ -130,7 +130,7 @@ class AdaptiveCI : public ActiveSpaceMethod {
     // ==> Class data <==
 
     DeterminantHashVec final_wfn_;
-    SharedMatrix final_evecs_;
+    psi::SharedMatrix final_evecs_;
 
     WFNOperator op_;
 
