@@ -29,6 +29,9 @@
 #ifndef _state_info_h_
 #define _state_info_h_
 
+#include <memory>
+#include <string>
+
 namespace psi {
 class Wavefunction;
 }

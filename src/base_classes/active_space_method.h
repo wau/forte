@@ -32,6 +32,7 @@
 #include <vector>
 
 #include "base_classes/state_info.h"
+#include "psi4/libmints/vector.h"
 
 namespace forte {
 
