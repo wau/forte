@@ -198,7 +198,8 @@ void LOCALIZE::full_localize() {
     for (int h = 0; h < nirrep; ++h) {
         for (size_t i = 0; i < nact; ++i) {
             for (size_t j = 0; j < nact; ++j) {
-                U->set(h, i + nfrz_ + nrst_, j + nfrz_ + nrst_, Ua->get(h,i,j));
+                Ua_->set(h, i + nfrz_ + nrst_, j + nfrz_ + nrst_, Ua->get(h,i,j));
+                Ub_->set(h, i + nfrz_ + nrst_, j + nfrz_ + nrst_, Ua->get(h,i,j));
             }
         }
     }
