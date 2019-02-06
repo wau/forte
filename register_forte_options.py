@@ -11,6 +11,7 @@ def register_forte_options(forte_options):
     register_pci_options(forte_options)
     register_fci_options(forte_options)
     register_aci_options(forte_options)
+    register_tdaci_options(forte_options)
     register_active_space_solver_options(forte_options)
 
 def register_driver_options(forte_options):
@@ -360,6 +361,34 @@ def register_aci_options(forte_options):
     forte_options.add_bool("ACI_DIRECT_RDMS", False, "Computes RDMs without coupling lists?")
 
     forte_options.add_str("ACI_BATCH_ALG", "HASH",['HASH','VECSORT'], "Algorithm to use for batching")
+
+def register_tdaci_options(forte_options):
+
+    forte_options.add_int("TDACI_HOLE", 0, 
+            "Orbital used to ionize intial state. Number is indexed by the same ordering of orbitals in the determinants.")
+
+    forte_options.add_str("TDACI_PROPAGATOR", "EXACT", ['EXACT','CN','QCN','LINEAR','QUADRATIC', 
+                          'RK4', 'LANCZOS', 'EXACT_SELECT', 'RK4_SELECT', 'RK4_SELECT_LIST','ALL'],"Type of propagator")
+
+    forte_options.add_int("TDACI_NSTEP", 20, "Number of time-steps")
+
+    forte_options.add_double("TDACI_TIMESTEP", 1.0, "Timestep length in attosecond")
+
+    forte_options.add_double("TDACI_CN_CONVERGENCE", 1e-12, "Convergence threshold for CN iterations")
+
+    forte_options.add_bool("TDACI_PRINT_WFN", False, "Print coefficients to files")
+
+    forte_options.add_array("TDACI_OCC_ORB", "Print the occupation at integral time itervals for these orbitals")
+
+    forte_options.add_int("TDACI_KRYLOV_DIM", 5, "Dimension of Krylov subspace for Lanczos method")
+
+    forte_options.add_double("TDACI_ETA_P", 1e-12, "Path filtering threshold for P space")
+
+    forte_options.add_double("TDACI_ETA_PQ", 1e-12, "Path filtering threshold for Q space")
+
+    forte_options.add_double("TDACI_PRESCREEN_THRESH", 1e-12, "Prescreening threshold")
+
+    forte_options.add_bool("TDACI_TEST_OCC", False, "Test the occupation vectors")
 
 def register_integral_options(forte_options):
     forte_options.add_str(
