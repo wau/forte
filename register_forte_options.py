@@ -27,6 +27,9 @@ def register_driver_options(forte_options):
                           'Dynamical correlation solver type')
     forte_options.add_str('CALC_TYPE', 'SS', ['SS', 'SA', 'MS', 'DWMS'],
                           'The type of computation')
+    forte_options.add_int('ACTIVE_SPACE_MAX_RDM', 1,
+                          'The maximum rank of the reduced density matrices computed by the active space solver.')
+
 
 def register_avas_options(forte_options):
     forte_options.add_double("AVAS_SIGMA", 0.98, "Threshold that controls the size of the active space")
@@ -215,13 +218,9 @@ def register_pci_options(forte_options):
                         "The functional order of PCI_FUNCTIONAL is SPECIFY-ORDER")
 
 
-
 def register_fci_options(forte_options):
     forte_options.add_int('FCI_MAXITER', 30,
                           'Maximum number of iterations for FCI code')
-    forte_options.add_int(
-        'FCI_MAX_RDM', 1,
-        'The number of trial guess vectors to generate per root')
     forte_options.add_bool('FCI_TEST_RDMS', False,
                            'Test the FCI reduced density matrices?')
     forte_options.add_bool('FCI_PRINT_NO', False,
@@ -229,6 +228,7 @@ def register_fci_options(forte_options):
     forte_options.add_int(
         'FCI_NTRIAL_PER_ROOT', 10,
         'The number of trial guess vectors to generate per root')
+
 
 def register_aci_options(forte_options):
     forte_options.add_double("ACI_CONVERGENCE", 1e-9, "ACI Convergence threshold")

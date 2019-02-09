@@ -37,18 +37,26 @@ import psi4.driver.p4util as p4util
 from psi4.driver.procrouting import proc_util
 
 def forte_driver(state_weights_map, scf_info, options, ints, mo_space_info):
-    max_rdm_level = 3 # TODO: set this (Francesco)
+
+    active_space_solver_type = options.get_str('ACTIVE_SPACE_SOLVER')
+    correlation_solver_type = options.get_str('CORRELATION_SOLVER')
+
+    # The maximum RDM rank is read from an option and redefined if running a correlated computation
+    if correlation_solver_type == 'NONE':
+        max_rdm_level = options.get_int('ACTIVE_SPACE_MAX_RDM')
+    else:
+        max_rdm_level = 3
+
     return_en = 0.0
 
+    # A map of state symmetry information -> number of roots
     state_map = forte.to_state_nroots_map(state_weights_map)
 
     # Create an active space solver object and compute the energy
-    active_space_solver_type = options.get_str('ACTIVE_SPACE_SOLVER')
     as_ints = forte.make_active_space_ints(mo_space_info, ints, "ACTIVE", ["RESTRICTED_DOCC"]);
     active_space_solver = forte.make_active_space_solver(active_space_solver_type,state_map,scf_info,mo_space_info,as_ints,options)
     active_space_solver.set_max_rdm_level(max_rdm_level)
     state_energies_list = active_space_solver.compute_energy()
-
 
     # Notes (York):
     #     cases to run active space solver: reference relaxation, state-average dsrg
@@ -56,7 +64,6 @@ def forte_driver(state_weights_map, scf_info, options, ints, mo_space_info):
     Etemp1, Etemp2 = 0.0, 0.0
 
     # Create a dynamical correlation solver object
-    correlation_solver_type = options.get_str('CORRELATION_SOLVER')
     if correlation_solver_type != 'NONE':
         # Grab the reference
         reference = active_space_solver.compute_average_reference(state_weights_map) # TODO: this should be chosen in a smart way
