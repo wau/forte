@@ -29,6 +29,7 @@ def register_driver_options(forte_options):
                           'The type of computation')
 
 def register_avas_options(forte_options):
+    forte_options.add_bool("AVAS", False, "Whether avas rotation is applied")
     forte_options.add_double("AVAS_SIGMA", 0.98, "Threshold that controls the size of the active space")
     forte_options.add_int("AVAS_NUM_ACTIVE", 0,
                      "The total number of active orbitals. "
