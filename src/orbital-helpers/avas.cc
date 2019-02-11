@@ -58,7 +58,6 @@ void make_avas(psi::SharedWavefunction ref_wfn, psi::Options& options, psi::Shar
 
         auto Socc = std::make_shared<psi::Matrix>("S occupied block", nocc, nocc);
         auto Svir = std::make_shared<psi::Matrix>("S virtual block", nvir, nvir);
-
         psi::SharedMatrix CPsC = Ps->clone();
         CPsC->transform(ref_wfn->Ca());
         // No diagonalization Socc and Svir
@@ -71,7 +70,6 @@ void make_avas(psi::SharedWavefunction ref_wfn, psi::Options& options, psi::Shar
         auto sigmavir = std::make_shared<Vector>("sigma virtual block", nvir);
 
         auto U = std::make_shared<psi::Matrix>("U", nmo, nmo);
-
         // diagnolize S
         if (diagonalize_s) {
             // Grab the occupied block and diagonalize it
@@ -83,7 +81,8 @@ void make_avas(psi::SharedWavefunction ref_wfn, psi::Options& options, psi::Shar
             }
 
             Socc->diagonalize(Uocc, sigmaocc, descending);
-
+	    CPsC->print();
+	    Svir->print();
             // Grab the virtual block and diagonalize it
             for (int a = 0; a < nvir; a++) {
                 for (int b = 0; b < nvir; b++) {
@@ -91,9 +90,7 @@ void make_avas(psi::SharedWavefunction ref_wfn, psi::Options& options, psi::Shar
                     Svir->set(a, b, value);
                 }
             }
-
             Svir->diagonalize(Uvir, sigmavir, descending);
-
             // Form the full matrix U
             for (int i = 0; i < nocc; i++) {
                 for (int j = 0; j < nocc; j++) {
@@ -138,7 +135,6 @@ void make_avas(psi::SharedWavefunction ref_wfn, psi::Options& options, psi::Shar
                 }
             }
         } // end options of dia
-
         auto Ca_tilde = psi::Matrix::doublet(ref_wfn->Ca(), U);
 
         // sum of the eigenvalues (occ + vir)
@@ -166,7 +162,6 @@ void make_avas(psi::SharedWavefunction ref_wfn, psi::Options& options, psi::Shar
         size_t avas_num_active_occ = options.get_int("AVAS_NUM_ACTIVE_OCC");
         size_t avas_num_active_vir = options.get_int("AVAS_NUM_ACTIVE_VIR");
         double avas_sigma = options.get_double("AVAS_SIGMA");
-
         if (avas_num_active_occ + avas_num_active_vir > 0) {
             for (const auto& mo_tuple : sorted_mos) {
                 bool is_occ = std::get<1>(mo_tuple);
