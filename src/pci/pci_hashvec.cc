@@ -625,6 +625,7 @@ double ProjectorCI_HashVec::compute_energy() {
         timer_on("PCI:Ortho");
         if (current_root_ > 0) {
             orthogonalize(dets_hashvec, C, solutions_);
+            normalize(C);
         }
         timer_off("PCI:Ortho");
 
@@ -697,9 +698,9 @@ double ProjectorCI_HashVec::compute_energy() {
     if (converged) {
         outfile->Printf("\n\n  Calculation converged.");
     } else {
-        outfile->Printf("\n\n  Calculation %s", iter_ != maxiter_
-                                                    ? "stoped in appearance of higher new low."
-                                                    : "did not converge!");
+        outfile->Printf("\n\n  Calculation %s",
+                        iter_ != maxiter_ ? "stoped in appearance of higher new low."
+                                          : "did not converge!");
     }
 
     if (do_shift_) {
@@ -2275,7 +2276,7 @@ void ProjectorCI_HashVec::orthogonalize(
         double dot_prod = dot(space, C, solutions[n].first, solutions[n].second);
         add(space, C, -dot_prod, solutions[n].first, solutions[n].second);
     }
-    normalize(C);
+    //    normalize(C);
 }
 
 double ProjectorCI_HashVec::form_H_C(const det_hashvec& dets_hashvec, std::vector<double>& C,
